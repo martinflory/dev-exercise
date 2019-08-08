@@ -14,10 +14,7 @@ class Animal {
     let endOfWord = "\\s\\,\\!\\?\\.\\,\\'\\\""
 
     let res = sentence.replace(new RegExp(`([^${endOfWord}])([${endOfWord}]|$)`,"g"),'$1' + ' ' + this.sound + '$2');
-    
-    
-    //let res = sentence.replace(/([^\s\,\!\?\.\'\"]+)([\s\,\!\?\.\'\"]|$)/g,'$1' + ' ' + this.sound + '$2');
-    
+      
     // add the animal sound between words
     return res;
   };
