@@ -66,24 +66,45 @@ describe('Zoo Test', function(){
 
 describe('Url Parser Test', function(){
   it('Basic test', function(done){
-    console.log(parser.parse("/:version/api/:collecton/:id","/6/api/listings/3?sort=desc&limit=10"));
+    let res=parser.parse("/:version/api/:collection/:id","/6/api/listings/3?sort=desc&limit=10");
+
+    expect(res).to.have.property('version', '6');
+    expect(res).to.have.property('collection', 'listings');
+    expect(res).to.have.property('id', '3');
+    expect(res).to.have.property('sort', 'desc');
+    expect(res).to.have.property('limit', '10');
+    
     done();
   });
 
-  it('No parts, only params',function(){
-
+  it('No parts, only params',function(done){
+    let res=parser.parse("/version/api/collection/id","/version/api/collection/id?sort=asc&limit=20");
+    expect(res).to.have.all.keys('limit','sort');
+    expect(res).to.have.property('sort', 'asc');
+    expect(res).to.have.property('limit', '20');
+    done();
   });
 
-  it('No params, only parts',function(){
-
+  it('No params, only parts',function(done){
+    let res=parser.parse("/this/:is/:a/part/","/this/weird/custom/part");
+    expect(res).to.have.all.keys('is','a');
+    expect(res).to.have.property('is', 'weird');
+    expect(res).to.have.property('a', 'custom');
+    done();
   });
 
-  it('empty format, empty string',function(){
-
+  it('empty format, empty string',function(done){
+    let res=parser.parse("","");
+    expect(res).to.be.empty;
+    done();
   });
 
   
-  it('empty format, has params',function(){
-
+  it('empty format, has params',function(done){
+    let res=parser.parse("","?firstName=Martin&lastName=Flory");
+    expect(res).to.have.all.keys('firstName','lastName');
+    expect(res).to.have.property('firstName', 'Martin');
+    expect(res).to.have.property('lastName', 'Flory');
+    done();
   });
 })

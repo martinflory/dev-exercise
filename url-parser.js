@@ -2,9 +2,12 @@
 
 function parseParts(urlFormat, urlInstanceParts){
   let res={};
-  let urlInstanceArr = urlInstanceParts.split('/'); // splits with slashes
-  let urlFormatArr = urlFormat.split('/');  // splits on slashes
+  // splits urlFormat and urlInstance on '/'
+  let urlInstanceArr = urlInstanceParts.split('/'); 
+  let urlFormatArr = urlFormat.split('/');  
 
+  // For each part to extract, add the key and the value to the response.
+  // Same format = same index for the parts to extract
   urlFormatArr.forEach( (x, i) => {
     if (x[0]== ':'){
       res[x.slice(1)]=urlInstanceArr[i]; 
@@ -18,8 +21,10 @@ function parseParts(urlFormat, urlInstanceParts){
 function parseParams(urlInstanceParams){
   let res={};
 
-  let urlInstanceArr = urlInstanceParams.split('&'); // splits with ampersands
+  // Split param string
+  let urlInstanceArr = urlInstanceParams.split('&'); 
 
+  // For each param, add the key and the value to the response.
   urlInstanceArr.map( x => {
     let xArr=x.split('=');
     res[xArr[0]]= xArr[1];
@@ -30,12 +35,17 @@ function parseParams(urlInstanceParams){
 
 
 function parse(urlFormat, urlInstance){
-    let res={};
-    let url=urlInstance.split('?');
-    let parts = parseParts(urlFormat, url[0]);
-    let params = parseParams(url[1]);
 
-    res=Object.assign({},parts,params);
+    let url=urlInstance.split('?');
+
+    //if there are parts, parse parts.
+    let parts =  url[0] ? parseParts(urlFormat,url[0]) : {};
+
+    //if there are params, parse parts.
+    let params = url[1] ? parseParams(url[1]) : {};
+
+    //create the response copying parts and params.
+    let res=Object.assign({},parts,params);
 
     return res;
 }    
